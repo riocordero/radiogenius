@@ -1,4 +1,4 @@
 radiogenius
 ===========
 
-a repository for the radiogenius hackathon
+A repository for the radiogenius hackathon
