@@ -1,26 +1,106 @@
+# Try running: RadioGrabber.new("http://u12b.di.fm:80/di_vocaltrance").grab
+
 # monkey patch EM::HttpConnection
+HEADER_SEPARATOR = "\r\n"
+HEADER_END_SEPARATOR = "\r\n\r\n"
+
 module EventMachine
   class HttpConnection
+    attr_accessor :headers
+
     def receive_data(data)
+      if !defined?(@hacked)
+        @hacked = true
+        @count = 0
+        @total_bytes = 0
+        @headers = {}
+        @header_buffer = ''
+        @headers_done = false
+      end
       begin
-        if !defined?(@hack)
-          data.gsub!("ICY", "HTTP/1.1") # hack to change ICY to HTTP/1.1 so HTTP::Parser don't freak out
-          @hack = true
-        end 
-        @p << data
+        if !@headers_done
+          idx = data.index(HEADER_END_SEPARATOR)
+          if idx
+            @header_buffer += data[0, idx]
+            data = data[(idx + HEADER_END_SEPARATOR.length)..-1]
+
+            @headers_done = true
+            puts @header_buffer.inspect
+            puts '========================================'
+            puts data
+            @header_buffer.split(HEADER_SEPARATOR).each do |full_header|
+              key, value = full_header.split(':').map(&:strip)
+              @headers[key] = value
+            end
+            @headers.each do |k, v|
+              puts "#{k} - #{v}"
+            end
+          else
+            @header_buffer += data
+          end
+        end
+
+        if @headers_done
+          @stream.call(data)
+        end
       rescue HTTP::Parser::Error => e
         c = @clients.shift
         c.nil? ? unbind(e.message) : c.on_error(e.message)
       end
-    end 
+    end
   end
 end
 
+# module EventMachine
+#   class HttpConnection
+#     def post_init
+#       @clients = []
+#       @pending = []
+# 
+#       @p = Http::Parser.new
+#       @p.header_value_type = :mixed
+#       @p.on_headers_complete = proc do |h|
+#         client.parse_response_header(h, @p.http_version, @p.status_code)
+#         @header_completed = true
+#         :reset if client.req.no_body?
+#       end
+# 
+#       @p.on_body = proc do |b|
+#         client.on_body_data(b)
+#       end
+# 
+#       @p.on_message_complete = proc do
+#         if not client.continue?
+#           c = @clients.shift
+#           c.state = :finished
+#           c.on_request_complete
+#         end
+#       end
+#     end
+#         
+#     def receive_data(data)
+#       begin
+#         if !defined?(@hack)
+#           @hack = true
+#           data.gsub!("ICY 200 OK", "HTTP/1.1 200 OK\r\nTransfer-Encoding:chunked")
+#         end
+#         if defined?(@header_completed) 
+#           puts data
+#           raise 'error'
+#         else
+#           @p << data
+#         end
+#       rescue HTTP::Parser::Error => e
+#         c = @clients.shift
+#         c.nil? ? unbind(e.message) : c.on_error(e.message)
+#       end
+#     end
+#   end
+# end
 
 class RadioGrabber
-  
   attr_reader :url
-  
+
   def initialize(url)
     @url = url
     @conn = {
@@ -36,28 +116,38 @@ class RadioGrabber
       :keepalive => true,
       :head => {
         "Icy-MetaData" => "1",
-        # 'Accept' => '*/*'              
+        'Accept' => '*/*'
       }
     }
   end
-  
+
   def grab
     EM.run do
-      http = EventMachine::HttpRequest.new(url, @conn).get(@options)
-      
-      http.errback {
-        puts http.error
+      http = EventMachine::HttpRequest.new(url, @conn)
+      count = 0
+      bytes = 0
+      streamMetadataIndex = nil
+      bits = 'n/a'
+      streamer = Proc.new { |chunk|
+        idx = chunk.index('StreamTitle')
+        if idx
+          new_bits = chunk.match(/StreamTitle='([^']*?)'/)[1]
+          bits = new_bits if new_bits.length > 0
+          streamMetadataIndex = bytes + idx
+        end
+        bytes += chunk.length
+
+        STDOUT.print "\rStream callback hit #{count += 1} (#{bytes}B total) - last stream metadata '#{bits}'@#{streamMetadataIndex}"
       }
+      http.instance_variable_set(:@stream, streamer)
+      http = http.get(@options)
 
       http.headers {
-        puts "icy-metaint: #{http.response_header['icy-metaint']}"
+        http.response_header.each do |k, v|
+          puts "#{k} - #{v}"
+        end
+        # puts "icy-metaint: #{http.response_header['icy-metaint']}"
       }
-
-      http.stream { |chunk|
-        puts chunk
-      }
-
     end
   end
-  
 end
