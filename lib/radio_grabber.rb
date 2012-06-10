@@ -1,9 +1,13 @@
+# Try running: RadioGrabber.new("http://u12b.di.fm:80/di_vocaltrance").grab
+
 # monkey patch EM::HttpConnection
 HEADER_SEPARATOR = "\r\n"
 HEADER_END_SEPARATOR = "\r\n\r\n"
 
 module EventMachine
   class HttpConnection
+    attr_accessor :headers
+
     def receive_data(data)
       if !defined?(@hacked)
         @hacked = true
@@ -13,9 +17,7 @@ module EventMachine
         @header_buffer = ''
         @headers_done = false
       end
-      puts "Received data: #{@count += 1} #{@total_bytes += data.length}"
       begin
-        # @p << data
         if !@headers_done
           idx = data.index(HEADER_END_SEPARATOR)
           if idx
@@ -23,20 +25,21 @@ module EventMachine
             data = data[(idx + HEADER_END_SEPARATOR.length)..-1]
 
             @headers_done = true
+            puts @header_buffer.inspect
+            puts '========================================'
+            puts data
             @header_buffer.split(HEADER_SEPARATOR).each do |full_header|
               key, value = full_header.split(':').map(&:strip)
               @headers[key] = value
             end
-            puts "Parsed headers."
-        @headers.each do |k, v|
-          puts "#{k} - #{v}"
-        end
+            @headers.each do |k, v|
+              puts "#{k} - #{v}"
+            end
           else
             @header_buffer += data
           end
         end
 
-        puts "\tHeaders? #{@headers_done}"
         if @headers_done
           @stream.call(data)
         end
@@ -67,7 +70,7 @@ class RadioGrabber
       :keepalive => true,
       :head => {
         "Icy-MetaData" => "1",
-        # 'Accept' => '*/*'
+        'Accept' => '*/*'
       }
     }
   end
@@ -75,11 +78,23 @@ class RadioGrabber
   def grab
     EM.run do
       http = EventMachine::HttpRequest.new(url, @conn)
+      count = 0
+      bytes = 0
+      streamMetadataIndex = nil
+      bits = 'n/a'
       streamer = Proc.new { |chunk|
-        puts "Stream callback hit"
+        idx = chunk.index('StreamTitle')
+        if idx
+          new_bits = chunk.match(/StreamTitle='([^']*?)'/)[1]
+          bits = new_bits if new_bits.length > 0
+          streamMetadataIndex = bytes + idx
+        end
+        bytes += chunk.length
+
+        STDOUT.print "\rStream callback hit #{count += 1} (#{bytes}B total) - last stream metadata '#{bits}'@#{streamMetadataIndex}"
       }
       http.instance_variable_set(:@stream, streamer)
-      http = http.get
+      http = http.get(@options)
 
       http.headers {
         http.response_header.each do |k, v|
@@ -89,5 +104,4 @@ class RadioGrabber
       }
     end
   end
-
 end
