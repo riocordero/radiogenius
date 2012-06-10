@@ -129,7 +129,15 @@ class RadioGrabber
       streamMetadataIndex = nil
       bits = 'n/a'
       streamer = Proc.new { |chunk|
-        puts "Stream callback hit: #{chunk.size}"
+        idx = chunk.index('StreamTitle')
+        if idx
+          new_bits = chunk.match(/StreamTitle='([^']*?)'/)[1]
+          bits = new_bits if new_bits.length > 0
+          streamMetadataIndex = bytes + idx
+        end
+        bytes += chunk.length
+
+        STDOUT.print "\rStream callback hit #{count += 1} (#{bytes}B total) - last stream metadata '#{bits}'@#{streamMetadataIndex}"
       }
       http.instance_variable_set(:@stream, streamer)
       http = http.get(@options)
