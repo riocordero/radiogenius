@@ -4,27 +4,4 @@
 		<%=submit_tag("Search")%>
 	<%end%>
 	
-	<script>
-				function get_radio(){
-					return document.getElementById('obj2');
-				}
-			</script>
-			<input type="button" value="play radio" onclick="get_radio().sndPlay();" />
-			<input type="button" value="stop radio" onclick="get_radio().sndStop();" />
-			<br>
-			<input type="button" value="trigger stopped" 
-				onclick="if(get_radio().sndTrigger()){this.value='trigger started'}else{this.value='trigger stopped'}" />
-			<br>
-			<input type="text" value="http://50.117.115.211:80/;" id="custom_radio" />
-			<input type="button" value="play custom" onclick="get_radio().sndPlay(document.getElementById('custom_radio').value);"
-			<br/>
-			<div style="background-color:#FDD;">
-				Do you see something here? -&gt
-				<embed src="irp.swf" width="1" height="1" id="obj2" wmode="transparent" ></embed>
-				&lt;- No! Because it is invisible!
-				<!-- 
-					You also can use autoplay parameter and specify url of radio
-					<embed src="irp.swf" width="1" height="1" id="obj2" wmode="transparent" flashvars="autoplay=1&url=..."></embed>
-				-->
-			</div>
 </div>

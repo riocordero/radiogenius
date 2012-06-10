@@ -1,7 +1,8 @@
 Radiogenius::Application.routes.draw do
-  resources :plays
-
-  resources :stations
+  resources :plays, :only => [:index] do
+  end
+  resources :stations, :only => [:index] do
+  end
   resources :search
 
   # The priority is based upon order of creation:
