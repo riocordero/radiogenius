@@ -3,7 +3,11 @@ class PlaysController < ApplicationController
   # GET /plays
   # GET /plays.json
   def index
-    @plays = Play.all
+    if params[:q]
+      @plays = Play.search(params[:q])
+    else
+      @plays = Play.all
+    end
 
     respond_to do |format|
       format.html # index.html.erb
