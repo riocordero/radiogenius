@@ -8,8 +8,8 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 
-station1 = Station.create({:url => 'http://google.com', :name => 'Station 1'})
-station2 = Station.create({:url => 'http://google.com', :name => 'Station 2'})
+station1 = Station.create({:url => 'http://google.com', :name => 'Station 1', :stream_type => 'mp3'})
+station2 = Station.create({:url => 'http://google.com', :name => 'Station 2', :stream_type => 'acc'})
 
 songs = []
 lady_gaga_songs = ['Bad Romance', 'Poker Face', 'Born This Way', 'Alejandro',
