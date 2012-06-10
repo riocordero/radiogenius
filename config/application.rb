@@ -53,6 +53,10 @@ module Radiogenius
     # parameters by using an attr_accessible or attr_protected declaration.
     config.active_record.whitelist_attributes = true
 
+    # We use MySQL full text search, which the internet suggests Rails isn't
+    # good at generating schema dumps for.
+    config.active_record.schema_format = :sql
+
     # Enable the asset pipeline
     config.assets.enabled = true
 
