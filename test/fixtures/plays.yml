@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  start_time: 2012-06-10 12:35:45
+  search_blob: MyText
+  artist: MyString
+  song_title: MyString
+
+two:
+  start_time: 2012-06-10 12:35:45
+  search_blob: MyText
+  artist: MyString
+  song_title: MyString

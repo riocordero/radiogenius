@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Start time:</b>
+  <%= @play.start_time %>
+</p>
+
+<p>
+  <b>Search blob:</b>
+  <%= @play.search_blob %>
+</p>
+
+<p>
+  <b>Artist:</b>
+  <%= @play.artist %>
+</p>
+
+<p>
+  <b>Song title:</b>
+  <%= @play.song_title %>
+</p>
+
+
+<%= link_to 'Edit', edit_play_path(@play) %> |
+<%= link_to 'Back', plays_path %>

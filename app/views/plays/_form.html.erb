@@ -1,0 +1,33 @@
+<%= form_for(@play) do |f| %>
+  <% if @play.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@play.errors.count, "error") %> prohibited this play from being saved:</h2>
+
+      <ul>
+      <% @play.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :start_time %><br />
+    <%= f.datetime_select :start_time %>
+  </div>
+  <div class="field">
+    <%= f.label :search_blob %><br />
+    <%= f.text_area :search_blob %>
+  </div>
+  <div class="field">
+    <%= f.label :artist %><br />
+    <%= f.text_field :artist %>
+  </div>
+  <div class="field">
+    <%= f.label :song_title %><br />
+    <%= f.text_field :song_title %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
