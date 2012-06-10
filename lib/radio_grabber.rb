@@ -1,3 +1,22 @@
+# monkey patch EM::HttpConnection
+module EventMachine
+  class HttpConnection
+    def receive_data(data)
+      begin
+        if !defined?(@hack)
+          data.gsub!("ICY", "HTTP/1.1") # hack to change ICY to HTTP/1.1 so HTTP::Parser don't freak out
+          @hack = true
+        end 
+        @p << data
+      rescue HTTP::Parser::Error => e
+        c = @clients.shift
+        c.nil? ? unbind(e.message) : c.on_error(e.message)
+      end
+    end 
+  end
+end
+
+
 class RadioGrabber
   
   attr_reader :url
@@ -17,7 +36,7 @@ class RadioGrabber
       :keepalive => true,
       :head => {
         "Icy-MetaData" => "1",
-        'Accept' => '*/*'              
+        # 'Accept' => '*/*'              
       }
     }
   end
@@ -29,14 +48,10 @@ class RadioGrabber
       http.errback {
         puts http.error
       }
-      
-      http.receive_data { |data|
-        puts data
-      }
 
-      # http.headers {
-      #   puts "icy-metaint: #{http.response_header['icy-metaint']}"
-      # }
+      http.headers {
+        puts "icy-metaint: #{http.response_header['icy-metaint']}"
+      }
 
       http.stream { |chunk|
         puts chunk
