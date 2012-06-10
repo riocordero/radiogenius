@@ -4,18 +4,12 @@
   <tr>
     <th>Url</th>
     <th>Name</th>
-    <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
 <% @stations.each do |station| %>
   <tr>
     <td><%= station.url %></td>
     <td><%= station.name %></td>
-    <td><%= link_to 'Show', station %></td>
-    <td><%= link_to 'Edit', edit_station_path(station) %></td>
-    <td><%= link_to 'Destroy', station, confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
 </table>
