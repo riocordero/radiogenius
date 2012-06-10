@@ -12,4 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require soundmanager2-nodebug-jsmin.js
+//= require inlineplayer.js
 //= require_tree .
