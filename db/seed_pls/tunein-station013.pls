@@ -1,0 +1,24 @@
+[playlist]
+numberofentries=7
+File1=http://212.48.110.70:8022
+Title1=(#1 - 126/1500) RMNradio....Music Fun and More!
+Length1=-1
+File2=http://84.19.182.20:8022
+Title2=(#2 - 56/300) RMNradio....Music Fun and More!
+Length1=-1
+File3=http://84.19.182.117:8022
+Title3=(#3 - 60/300) RMNradio....Music Fun and More!
+Length1=-1
+File4=http://83.169.61.78:8022
+Title4=(#4 - 61/300) RMNradio....Music Fun and More!
+Length1=-1
+File5=http://80.237.155.20:8022
+Title5=(#5 - 61/300) RMNradio....Music Fun and More!
+Length1=-1
+File6=http://80.252.99.10:7022
+Title6=(#6 - 7/25) RMNradio....Music Fun and More!
+Length1=-1
+File7=http://80.237.201.92:8010
+Title7=(#7 - 77/250) RMNradio....Music Fun and More!
+Length1=-1
+Version=2
