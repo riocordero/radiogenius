@@ -48,6 +48,52 @@ module EventMachine
   end
 end
 
+# module EventMachine
+#   class HttpConnection
+#     def post_init
+#       @clients = []
+#       @pending = []
+# 
+#       @p = Http::Parser.new
+#       @p.header_value_type = :mixed
+#       @p.on_headers_complete = proc do |h|
+#         client.parse_response_header(h, @p.http_version, @p.status_code)
+#         @header_completed = true
+#         :reset if client.req.no_body?
+#       end
+# 
+#       @p.on_body = proc do |b|
+#         client.on_body_data(b)
+#       end
+# 
+#       @p.on_message_complete = proc do
+#         if not client.continue?
+#           c = @clients.shift
+#           c.state = :finished
+#           c.on_request_complete
+#         end
+#       end
+#     end
+#         
+#     def receive_data(data)
+#       begin
+#         if !defined?(@hack)
+#           @hack = true
+#           data.gsub!("ICY 200 OK", "HTTP/1.1 200 OK\r\nTransfer-Encoding:chunked")
+#         end
+#         if defined?(@header_completed) 
+#           puts data
+#           raise 'error'
+#         else
+#           @p << data
+#         end
+#       rescue HTTP::Parser::Error => e
+#         c = @clients.shift
+#         c.nil? ? unbind(e.message) : c.on_error(e.message)
+#       end
+#     end
+#   end
+# end
 
 class RadioGrabber
   attr_reader :url
@@ -57,17 +103,17 @@ class RadioGrabber
     @conn = {
       :connect_timeout => '5',
       :inactivity_timeout => '10',
-      # :proxy => {
-      #   :host => '127.0.0.1',    # proxy address
-      #   :port => 8888,           # proxy port
-      # },
+      :proxy => {
+        :host => '127.0.0.1',    # proxy address
+        :port => 8888,           # proxy port
+      },
     }
     @options = {
       :redirects => 5,           # follow 3XX redirects up to depth 5
       :keepalive => true,
       :head => {
         "Icy-MetaData" => "1",
-        # 'Accept' => '*/*'
+        'Accept' => '*/*'
       }
     }
   end
@@ -76,10 +122,10 @@ class RadioGrabber
     EM.run do
       http = EventMachine::HttpRequest.new(url, @conn)
       streamer = Proc.new { |chunk|
-        puts "Stream callback hit"
+        puts "Stream callback hit: #{chunk.size}"
       }
       http.instance_variable_set(:@stream, streamer)
-      http = http.get
+      http = http.get(@options)
 
       http.headers {
         http.response_header.each do |k, v|
