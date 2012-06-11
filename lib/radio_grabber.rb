@@ -139,10 +139,10 @@ class RadioGrabber
       streamer = Proc.new { |chunk|
         begin
           listen_for_metadata(chunk)
-        rescue e
-          logger.error "error steam failed: #{e.inspect}"
-        ensure
-          retry_on_error
+        # rescue e
+        #   logger.error "error steam failed: #{e.inspect}"
+        # ensure
+        #   retry_on_error
         end
         # byte_array = chunk.bytes.to_a
         # idx = chunk.index('StreamTitle')
@@ -207,9 +207,9 @@ class RadioGrabber
   protected
   def listen_for_metadata(data)
     # TODO: use byte count to actually do this correctly... 
-    idx = data.index('StreamTitle')
-    if idx
-      blob = /StreamTitle=(?<metadata>[^;]+)/.match(data)[:metadata]
+    matcher = /StreamTitle=(?<metadata>[^;]+)/.match(data)
+    if matcher
+      blob = matcher[:metadata]
       unless blob.blank?
         # clean the begin quote and end quote characters
         if blob[0] =~ /[\'\"]/ && blob[blob.size-1] =~ /[\'\"]/

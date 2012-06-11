@@ -1,3 +1,4 @@
+require 'radio_backend'
 namespace :backend do
   
   task :start => :environment do
