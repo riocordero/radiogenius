@@ -155,12 +155,12 @@ class RadioGrabber
       http = http.get(@options)
 
       http.headers {
-        http.response_header.each do |k, v|
-          puts "#{k} - #{v}"
-        end
+        # http.response_header.each do |k, v|
+        #   puts "#{k} - #{v}"
+        # end
         
-        @metadata_interval = http.response_header['icy-metaint']
-        puts "interval: #{metadata_interval}"
+        # @metadata_interval = http.response_header['icy-metaint']
+        # puts "interval: #{metadata_interval}"
         # puts "icy-metaint: #{http.response_header['icy-metaint']}"
       }
       
@@ -185,7 +185,7 @@ class RadioGrabber
         artist = metadata[0].strip
         song = metadata[1].strip
         if station
-          station.plays << Play.new(:played_at => Time.now, :search_blob => blob, :artist => artist, :song_title => song)
+          station.plays << Play.new(:started_at => Time.now, :search_blob => blob, :artist => artist, :song_title => song)
         else
           puts blob, artist, song
         end
