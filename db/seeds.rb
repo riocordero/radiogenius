@@ -145,9 +145,11 @@ end
 1000.times do |index|
   artist, song = songs.sample
   station = stations[index%4]
+  playing = index<stations.size ? true : false
 
   Play.create(:artist => artist,
               :song_title => song,
               :started_at => (index * 3).minutes.ago,
-              :station_id => station.id)
+              :station_id => station.id,
+              :playing => playing)
 end

@@ -11,4 +11,8 @@ class Station < ActiveRecord::Base
       return url
     end
   end
+  
+  def current
+    self.plays.select{|p| p.playing==true}[0]
+  end
 end
