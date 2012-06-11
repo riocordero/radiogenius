@@ -152,7 +152,7 @@ class RadioGrabber
         # STDOUT.print "\rStream callback hit #{count += 1} (#{bytes}B total) - last stream metadata '#{bits}'@#{streamMetadataIndex}"
       }
       @http.instance_variable_set(:@stream, streamer)
-      @http = http.get(@options)
+      @http = @http.get(@options)
 
       @http.headers {
         # http.response_header.each do |k, v|
