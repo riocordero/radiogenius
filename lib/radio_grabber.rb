@@ -240,6 +240,11 @@ class RadioGrabber
   end
   
   def retry_on_error
+    last = station.plays.last
+    if last
+      last.playing = false
+      last.save
+    end
     EM::Timer.new(5) do
       logger.info "retrying station: #{station.id}" if station
       grab # we try to grab again after 5 seconds

@@ -13,11 +13,12 @@ class PlaysController < ApplicationController
     @plays = all_plays.select{|p| p.playing == true}
     
     #find historical plays
-    historical_plays = all_plays.select{|p| p.playing == false}
+    historical_plays = all_plays.reject{|p| p.playing}
     station_counts = historical_plays.inject(Hash.new(0)) { |count_ary, play| count_ary[play.station_id] += 1 ; count_ary }
     station_counts = station_counts.sort {|a,b| b[1] <=> a[1]} 
     station_ids = station_counts.collect{|s| s[0]} #in correct order
-    station_ids = station_ids - @plays.collect{|p| p.station_id}
+    play_ids = @plays.collect{|p| p.station_id} # currently playing ids
+    station_ids = (station_ids - play_ids)[0..4] 
     
     #im sure there's a better way to do this in one db call
     #but a string of ids does not preserve order
@@ -26,7 +27,7 @@ class PlaysController < ApplicationController
     
     #backwards?
     station_ids.each do |id|
-      @potential_plays << Station.find(id).current
+      @potential_plays << Station.find(id).plays.last
     end
     
     respond_to do |format|

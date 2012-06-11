@@ -47,6 +47,7 @@ class RadioBackend
       @grabbers.each do |id, grabber|
         grabber.stop
       end
+      Play.update_all(:playing => false)
       EM.stop_event_loop
       logger.info "stopped all grabbers"
     end
