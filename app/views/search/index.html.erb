@@ -10,7 +10,7 @@
     document.getElementById("q").focus();
   </script>
 
-  <div class="tag_cloud">
+  <div class="tag_cloud" style="text-align:center">
     <%if @tag_cloud_hash%>
       <% @tag_cloud_hash.each do |tag,size|%>
       <%=link_to tag, "/plays?q=#{tag}", :style=>"font-size:#{size}px"%>
