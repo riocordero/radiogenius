@@ -1,7 +1,7 @@
 <div>
-  <%=form_tag("/plays", :method=>"get", :id => 'search-box', :class => 'form-inline') do %>
+  <%=form_tag("/plays", :method=>"get", :id => 'search-box', :class => 'form-inline offset2') do %>
     <%= text_field_tag(:q, params[:q], :class => 'span6 btn-large') %>
-    <%= submit_tag("Search", :class => 'btn btn-primary btn-large') %>
+    <%= submit_tag("Search", :class => 'span2 btn btn-primary btn-large') %>
   <% end %>
 </div>
 
@@ -22,23 +22,22 @@
   <h3>Currently Playing</h3>
 
   <table class="table" width="100%">
-    <tr>
-      <th></th>
-      <th></th>
-      <th>Station</th>
-      <th>Song title</th>
-      <th>Artist</th>
-      <th>Start Time</th>
-    </tr>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Station</th>
+        <th>Song title</th>
+        <th>Artist</th>
+        <th>Started</th>
+      </tr>
 
   <% @plays.each do |play| %>
     <tr>
       <td><%=link_to "play", "javascript:get_radio().sndPlay('#{play.station.streamable_url}')"%></td>
-      <td><%=link_to "stop", "javascript:get_radio().sndStop()"%></td>
       <td><%= play.station.name%></td>
       <td><%= play.song_title %></td>
       <td><%= play.artist %></td>
-      <td><%= time_ago_in_words(play.started_at)%></td>
+      <td><%= time_ago_in_words(play.started_at)%> ago</td>
     </tr>
   <% end %>
   <% if @plays.empty? %>
@@ -49,24 +48,24 @@
   </table>
 
   <h3>Recommended Stations</h3>
-  <table width="100%">
-    <tr>
-      <th></th>
-      <th></th>
-      <th>Station</th>
-      <th>Current Song</th>
-      <th>Artist</th>
-      <th>Start Time</th>
-    </tr>
+  <table class="table" width="100%">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Station</th>
+        <th>Current Song</th>
+        <th>Artist</th>
+        <th>Started</th>
+      </tr>
+    </thead>
 
     <% @potential_plays.each do |play| %>
       <tr>
         <td><%=link_to "play", "javascript:get_radio().sndPlay('#{play.station.streamable_url}')"%></td>
-        <td><%=link_to "stop", "javascript:get_radio().sndStop()"%></td>
         <td><%= play.station.name%></td>
         <td><%= play.song_title %></td>
         <td><%= play.artist %></td>
-        <td><%= time_ago_in_words(play.started_at)%></td>
+        <td><%= time_ago_in_words(play.started_at)%> ago</td>
       </tr>
     <% end %>
     <% if @plays.empty? %>

@@ -40,7 +40,8 @@ header div {
   overflow: hidden;
 }
 #search-box {
-  margin: .5em 0;
+  padding-top: .5em;
+  padding-bottom: .5em;
 }
 #q.btn-large {
   padding: 9px 14px;
