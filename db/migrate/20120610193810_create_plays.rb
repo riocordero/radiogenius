@@ -5,6 +5,7 @@ class CreatePlays < ActiveRecord::Migration
       t.string    :artist
       t.string    :song_title
       t.integer   :station_id
+      t.boolean   :playing
       t.datetime  :started_at
       t.timestamps
     end

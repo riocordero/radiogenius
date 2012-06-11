@@ -4,6 +4,7 @@ CREATE TABLE `plays` (
   `artist` varchar(255) DEFAULT NULL,
   `song_title` varchar(255) DEFAULT NULL,
   `station_id` int(11) DEFAULT NULL,
+  `playing` tinyint(1) DEFAULT NULL,
   `started_at` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,

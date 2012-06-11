@@ -4,11 +4,31 @@ class PlaysController < ApplicationController
   # GET /plays.json
   def index
     if params[:q]
-      @plays = Play.search(params[:q])
+      all_plays = Play.search(params[:q])
     else
-      @plays = Play.all
+      all_plays = Play.all
     end
-
+     
+    #plays
+    @plays = all_plays.select{|p| p.playing == true}
+    
+    #find historical plays
+    historical_plays = all_plays.select{|p| p.playing == false}
+    station_counts = historical_plays.inject(Hash.new(0)) { |count_ary, play| count_ary[play.station_id] += 1 ; count_ary }
+    station_counts = station_counts.sort {|a,b| b[1] <=> a[1]} 
+    station_ids = station_counts.collect{|s| s[0]} #in correct order
+    station_ids = station_ids - @plays.collect{|p| p.station_id}
+    
+    #im sure there's a better way to do this in one db call
+    #but a string of ids does not preserve order
+    #and i don't have time to mess with it at the moment
+    @potential_plays = []
+    
+    #backwards?
+    station_ids.each do |id|
+      @potential_plays << Station.find(id).current
+    end
+    
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @plays }
