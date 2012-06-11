@@ -2,26 +2,27 @@
 <html>
 <head>
   <title>Radiogenius</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= stylesheet_link_tag    "/bootstrap/css/bootstrap.min.css" %>
+  <%= stylesheet_link_tag "application", :media => "all" %>
+  <%= stylesheet_link_tag "/bootstrap/css/bootstrap.min.css" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <div class="container" style="padding-bottom: 5em">
+  <div class="container wrapper">
     <div class="row"><div class="span12">
       <%= render :partial=> "layouts/header"%>
 
       <%= yield %>
 
     </div></div>
+    <div class="push"></div>
   </div>
+
   <div class="footer">
   <div class="container">
     <div class="row"><div class="span12">
       <%= render :partial=> "layouts/footer"%>
     </div></div>
-    <div class="push"></div>
   </div></div>
 </body>
 </html>

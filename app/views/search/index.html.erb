@@ -1,20 +1,20 @@
-<div>
-	<%=form_tag("/plays", :method=>"get", :id => 'search-box', :class => 'form-inline') do %>
-		<%= text_field_tag(:q) %>
-		<%= submit_tag("Search", :class => 'btn') %>
-	<%end%>
-	
-	<div class="tag_cloud">
-		<%if @tag_cloud_hash%>
-			<% @tag_cloud_hash.each do |tag,size|%>
-				<%=link_to tag, "/plays?q=#{tag}", :style=>"font-size:#{size}px"%>
-			<%end%>
-		<%end%>
-	</div>
+<div style="padding-top: 10em">
+  <%=form_tag("/plays", :method=>"get", :id => 'search-box', :class => 'form-inline offset2') do %>
+    <div class="input-append">
+      <%= text_field_tag(:q, '', :class => 'span6 btn-large') %><%= submit_tag("Search", :class => 'span2 btn btn-primary btn-large') %>
+    </div>
+  <% end %>
+  <script
+     type="text/javascript"
+     language="javascript">
+    document.getElementById("q").focus();
+  </script>
 
-	<script
-               type="text/javascript"
-               language="javascript">
-               document.getElementById("q").focus();
-          </script>
+  <div class="tag_cloud">
+    <%if @tag_cloud_hash%>
+      <% @tag_cloud_hash.each do |tag,size|%>
+      <%=link_to tag, "/plays?q=#{tag}", :style=>"font-size:#{size}px"%>
+      <%end%>
+    <%end%>
+  </div>
 </div>
