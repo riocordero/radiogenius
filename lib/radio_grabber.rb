@@ -212,8 +212,14 @@ class RadioGrabber
         metadata = blob.split(/\s-\s/)
         artist = metadata[0].strip if metadata[0]
         song = metadata[1].strip if metadata[1]
-        if station
-          station.plays << Play.new(:started_at => Time.now, :search_blob => blob, :artist => artist, :song_title => song)
+        if station && artist && song
+          last = station.plays.last
+          if last.artist != artist || last.song_title != song 
+            # only create new entry when the song and artist have changed
+            station.plays << Play.new(:started_at => Time.now, :artist => artist, :song_title => song)
+          end
+        elsif station
+          logger.warn "no artist or song for station #{station.id} '#{blob}'"
         else
           logger.debug blob
         end
