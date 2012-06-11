@@ -32,7 +32,8 @@ header div {
   bottom: 0;
   right: 0;
 }
-#logo {
+#logo a {
+  display: block;
   height: 141px;
   width: 816px;
   background: url(/logo.png) no-repeat top left;
