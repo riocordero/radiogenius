@@ -1,3 +1,10 @@
 <div>
 	<h1>radiogeni.us</h1>	
+	<%if !@hide_search%>
+		<%=form_tag("/plays", :method=>"get") do %>
+			<%=text_field_tag(:q)%>
+			<%=submit_tag("Search")%>
+		<%end%>
+	<%end%>
+	
 </div>
