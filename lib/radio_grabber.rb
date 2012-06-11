@@ -139,8 +139,8 @@ class RadioGrabber
       streamer = Proc.new { |chunk|
         begin
           listen_for_metadata(chunk)
-        rescue Exception => e
-          logger.error "error steam failed: #{e.message}"
+        rescue e
+          logger.error "error steam failed: #{e.inspect}"
         ensure
           retry_on_error
         end
