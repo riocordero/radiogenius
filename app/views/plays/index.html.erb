@@ -1,26 +1,51 @@
-<h2>Search Results</h2>
+<div>
+  <%=form_tag("/plays", :method=>"get", :id => 'search-box') do %>
+    <%= text_field_tag(:q, params[:q]) %>
+    <%= submit_tag("Search") %>
+  <% end %>
+</div>
 
-<table>
-  <tr>
-	<th></th>
-	<th></th>
-	<th>Station</th>
- 	<th>Song title</th>
-    <th>Artist</th>
-    <th>Start Time</th>
-  </tr>
+<script type="text/javascript">
+  $('#search-box').submit(function(e) {
+    e.preventDefault();
+    var query = $(this).find('input[name="q"]').val();
+    var submit = $(this).find('input[type="submit"]').prop('disabled', true).val('Searching...');
+    $('#content').load(this.action + '?q=' + encodeURIComponent(query) + ' #content', function() {
+      submit.prop('disabled', false).val('Search');
+    });
+  });
+</script>
 
-<% @plays.each do |play| %>
-  <tr>
-	<td><%=link_to "play", "javascript:get_radio().sndPlay('#{play.station.streamable_url};')"%></td>
-	<td><%=link_to "stop", "javascript:get_radio().sndStop()"%></td>
-	<td><%= play.station.name%></td>
-	<td><%= play.song_title %></td>
-	<td><%= play.artist %></td>
-    <td><%= time_ago_in_words(play.start_time)%> ago</td>
-  </tr>
-<% end %>
-</table>
+<div id="content">
+  <h2>Search Results</h2>
+
+  <table width="100%">
+    <tr>
+      <th></th>
+      <th></th>
+      <th>Station</th>
+      <th>Song title</th>
+      <th>Artist</th>
+      <th>Start Time</th>
+    </tr>
+
+  <% @plays.each do |play| %>
+    <tr>
+      <td><%=link_to "play", "javascript:get_radio().sndPlay('#{play.station.streamable_url}')"%></td>
+      <td><%=link_to "stop", "javascript:get_radio().sndStop()"%></td>
+      <td><%= play.station.name%></td>
+      <td><%= play.song_title %></td>
+      <td><%= play.artist %></td>
+      <td><%= time_ago_in_words(play.started_at)%></td>
+    </tr>
+  <% end %>
+  <% if @plays.empty? %>
+    <tr>
+      <td colspan="6"><h1 style="margin: 5em auto; text-align: center">No results found</h1></td>
+    </tr>
+  <% end %>
+  </table>
+</div>
 
 <div>
 	<script>

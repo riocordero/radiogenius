@@ -1,8 +1,9 @@
 <div>
-	<%=form_tag("/plays", :method=>"get") do %>
-		<%=text_field_tag(:q)%>
-		<%=submit_tag("Search")%>
+	<%=form_tag("/plays", :method=>"get", :id => 'search-box') do %>
+		<%= text_field_tag(:q) %>
+		<%= submit_tag("Search") %>
 	<%end%>
+<<<<<<< HEAD
 	
 	<script
                type="text/javascript"
@@ -10,3 +11,6 @@
                document.getElementById("q").focus();
           </script>
 </div>
+=======
+</div>
+>>>>>>> AJAX-y search form
