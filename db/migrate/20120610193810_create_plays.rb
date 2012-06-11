@@ -1,12 +1,11 @@
 class CreatePlays < ActiveRecord::Migration
   def self.up
     create_table :plays do |t|
-      t.datetime :start_time
-      t.text :search_blob
-      t.string :artist
-      t.string :song_title
-      t.integer :station_id
-
+      t.text      :search_blob
+      t.string    :artist
+      t.string    :song_title
+      t.integer   :station_id
+      t.datetime  :started_at
       t.timestamps
     end
 

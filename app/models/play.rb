@@ -1,5 +1,5 @@
 class Play < ActiveRecord::Base
-  attr_accessible :artist, :search_blob, :song_title, :start_time, :station_id
+  attr_accessible :artist, :search_blob, :song_title, :started_at, :station_id
 
   before_save :build_search_blob
 

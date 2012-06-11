@@ -13,7 +13,8 @@ station1 = Station.create({:url => 'http://89.149.245.230:80', :name => 'HouseTi
 station2 = Station.create({:url => 'http://85.17.26.95:80', :name => 'TechnoBase.FM', :stream_type => 'acc'})
 station3 = Station.create({:url => 'http://88.190.24.47:80', :name => 'French Kiss FM', :stream_type => 'mp3'})
 station4 = Station.create({:url => 'http://scfire-ntc-aa08.stream.aol.com:80/stream/1026', :name => 'Progressive House - Digitally Imported', :stream_type => 'acc'})
-stations = [station1, station2, station3, station4]
+station5 = Station.create({:url => 'http://scfire-ntc-aa08.stream.aol.com:80/stream/1023', :name => '181.FM - POWER 181', :stream_type => 'mp3'});
+stations = [station1, station2, station3, station4, station5]
 
 songs = []
 lady_gaga_songs = ['Bad Romance', 'Poker Face', 'Born This Way', 'Alejandro',
@@ -147,6 +148,6 @@ end
 
   Play.create(:artist => artist,
               :song_title => song,
-              :start_time => (index * 3).minutes.ago,
+              :started_at => (index * 3).minutes.ago,
               :station_id => station.id)
 end

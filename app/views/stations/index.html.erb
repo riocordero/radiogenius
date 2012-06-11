@@ -1,7 +1,5 @@
 <h1>Listing stations</h1>
 
-<a href="http://www.freshly-ground.com/data/audio/binaural/Rain 3.mp3">Rain 3</a>
-
 <table>
   <tr>
     <th></th>
@@ -12,7 +10,7 @@
 
 <% @stations.each do |station| %>
   <tr>
-    <td><%=link_to "play", station.url, :class => 'inline-playable' %></td>
+    <td><%=link_to "play", "javascript:get_radio().sndPlay('#{station.streamable_url};')"%></td>
     <td><%=link_to "stop", "javascript:get_radio().sndStop()"%></td>
     <td><%= station.url %></td>
     <td><%= station.name %></td>
@@ -23,3 +21,14 @@
 <br />
 
 <%= link_to 'New Station', new_station_path %>
+
+<div>
+	<script>
+		function get_radio(){
+			return document.getElementById('player');
+		}
+	</script>
+	<div>
+		<embed src="irp.swf" width="1" height="1" id="player" wmode="transparent" ></embed>
+	</div>
+</div>
