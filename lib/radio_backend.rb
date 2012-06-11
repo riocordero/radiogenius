@@ -3,11 +3,11 @@ require 'radio_grabber'
 class RadioBackend
   
   Signal.trap('SIGINT') do
-    RadioBackend.instance.stop_all
+    RadioBackend.instance.stop_all if RadioBackend.instance
   end
   
   Signal.trap('TERM') do
-    RadioBackend.instance.stop_all
+    RadioBackend.instance.stop_all if RadioBackend.instance
   end
   
   class << self
@@ -50,9 +50,6 @@ class RadioBackend
       EM.stop_event_loop
       logger.info "stopped all grabbers"
     end
-  end
-  
-  private
-  
+  end  
   
 end
