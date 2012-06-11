@@ -20,7 +20,7 @@ class SearchController < ApplicationController
            tags.each do |tag| 
                weight = (artist_counts[tag]-minOccurs).to_f/(maxOccurs-minOccurs)
                size = minFontSize + ((maxFontSize-minFontSize)*weight).round
-               @tag_cloud_hash[tag] = size #if size > 7
+               @tag_cloud_hash[tag] = size if size > 7
            end
        end
   end
