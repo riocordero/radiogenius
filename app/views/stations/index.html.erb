@@ -1,21 +1,21 @@
 <h1>Listing stations</h1>
 
+<a href="http://www.freshly-ground.com/data/audio/binaural/Rain 3.mp3">Rain 3</a>
+
 <table>
   <tr>
+    <th></th>
+    <th></th>
     <th>Url</th>
     <th>Name</th>
-    <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
 <% @stations.each do |station| %>
   <tr>
+    <td><%=link_to "play", station.url, :class => 'inline-playable' %></td>
+    <td><%=link_to "stop", "javascript:get_radio().sndStop()"%></td>
     <td><%= station.url %></td>
     <td><%= station.name %></td>
-    <td><%= link_to 'Show', station %></td>
-    <td><%= link_to 'Edit', edit_station_path(station) %></td>
-    <td><%= link_to 'Destroy', station, confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
 </table>

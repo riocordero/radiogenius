@@ -1,29 +1,34 @@
-<h1>Listing plays</h1>
+<h2>Search Results</h2>
 
 <table>
   <tr>
-    <th>Start time</th>
-    <th>Search blob</th>
+	<th></th>
+	<th></th>
+	<th>Station</th>
+ 	<th>Song title</th>
     <th>Artist</th>
-    <th>Song title</th>
-    <th></th>
-    <th></th>
-    <th></th>
+    <th>Start Time</th>
   </tr>
 
 <% @plays.each do |play| %>
   <tr>
-    <td><%= play.start_time %></td>
-    <td><%= play.search_blob %></td>
-    <td><%= play.artist %></td>
-    <td><%= play.song_title %></td>
-    <td><%= link_to 'Show', play %></td>
-    <td><%= link_to 'Edit', edit_play_path(play) %></td>
-    <td><%= link_to 'Destroy', play, confirm: 'Are you sure?', method: :delete %></td>
+	<td><%=link_to "play", "javascript:get_radio().sndPlay('#{play.station.url};')"%></td>
+	<td><%=link_to "stop", "javascript:get_radio().sndStop()"%></td>
+	<td><%= play.station.name%></td>
+	<td><%= play.song_title %></td>
+	<td><%= play.artist %></td>
+    <td><%= time_ago_in_words(play.start_time)%></td>
   </tr>
 <% end %>
 </table>
 
-<br />
-
-<%= link_to 'New Play', new_play_path %>
+<div>
+	<script>
+		function get_radio(){
+			return document.getElementById('player');
+		}		
+	</script>
+	<div>
+		<embed src="irp.swf" width="1" height="1" id="player" wmode="transparent" ></embed>
+	</div>
+</div>

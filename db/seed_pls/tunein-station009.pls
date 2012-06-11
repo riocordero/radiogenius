@@ -1,0 +1,21 @@
+[playlist]
+numberofentries=6
+File1=http://80.237.157.97:8000
+Title1=(#1 - 77/500) MegaFox24 | Schlager Discofox Top40 | www.megafox24.de
+Length1=-1
+File2=http://46.163.124.61:8100
+Title2=(#2 - 100/350) MegaFox24 | Schlager Discofox Top40 | www.megafox24.de
+Length1=-1
+File3=http://46.163.124.61:8000
+Title3=(#3 - 87/300) MegaFox24 | Schlager Discofox Top40 | www.megafox24.de
+Length1=-1
+File4=http://46.163.124.61:12000
+Title4=(#4 - 147/500) MegaFox24 | Schlager Discofox Top40 | www.megafox24.de
+Length1=-1
+File5=http://89.149.254.138:8050
+Title5=(#5 - 59/200) MegaFox24 | Schlager Discofox Top40 | www.megafox24.de
+Length1=-1
+File6=http://89.149.254.138:8000
+Title6=(#6 - 111/150) MegaFox24 | Schlager Discofox Top40 | www.megafox24.de
+Length1=-1
+Version=2

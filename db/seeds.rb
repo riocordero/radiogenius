@@ -8,8 +8,12 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 
-station1 = Station.create({:url => 'http://google.com', :name => 'Station 1', :stream_type => 'mp3'})
-station2 = Station.create({:url => 'http://google.com', :name => 'Station 2', :stream_type => 'acc'})
+
+station1 = Station.create({:url => 'http://89.149.245.230:80', :name => 'HouseTime.FM', :stream_type => 'mp3'})
+station2 = Station.create({:url => 'http://85.17.26.95:80', :name => 'TechnoBase.FM', :stream_type => 'acc'})
+station3 = Station.create({:url => 'http://88.190.24.47:80', :name => 'French Kiss FM', :stream_type => 'mp3'})
+station4 = Station.create({:url => 'http://scfire-ntc-aa08.stream.aol.com:80/stream/1026', :name => 'Progressive House - Digitally Imported', :stream_type => 'acc'})
+stations = [station1, station2, station3, station4]
 
 songs = []
 lady_gaga_songs = ['Bad Romance', 'Poker Face', 'Born This Way', 'Alejandro',
@@ -139,7 +143,7 @@ end
 
 1000.times do |index|
   artist, song = songs.sample
-  station = index % 2 == 0 ? station1 : station2
+  station = stations[index%4]
 
   Play.create(:artist => artist,
               :song_title => song,
