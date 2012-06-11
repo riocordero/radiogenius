@@ -3,6 +3,14 @@
 		<%= text_field_tag(:q) %>
 		<%= submit_tag("Search") %>
 	<%end%>
+	
+	<div class="tag_cloud">
+		<%if @tag_cloud_hash%>
+			<% @tag_cloud_hash.each do |tag,size|%>
+				<%=link_to tag, :style=>"font_size:#{size}px"%>
+			<%end%>
+		<%end%>
+	</div>
 
 	<script
                type="text/javascript"
