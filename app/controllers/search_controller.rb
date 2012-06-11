@@ -14,13 +14,13 @@ class SearchController < ApplicationController
       minOccurs = tags_by_count.last[1]
 
       # Get relative size for each of the tags and store it in a hash
-      minFontSize = 5
+      minFontSize = 15
       maxFontSize = 40
       @tag_cloud_hash = Hash.new(0)
       tags.each do |tag| 
         weight = (artist_counts[tag]-minOccurs).to_f/((maxOccurs-minOccurs)+1)
         size = minFontSize + ((maxFontSize-minFontSize)*weight).round
-        @tag_cloud_hash[tag] = size if size > 10
+        @tag_cloud_hash[tag] = size # if size > 10
       end
     end
   end
