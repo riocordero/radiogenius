@@ -129,7 +129,7 @@ class RadioGrabber
 
   def grab
     EM.run do
-      http = EventMachine::HttpRequest.new(url, @conn)
+      @http = EventMachine::HttpRequest.new(url, @conn)
       # count = 0
       # bytes = 0
       # streamMetadataIndex = nil
@@ -151,10 +151,10 @@ class RadioGrabber
         # 
         # STDOUT.print "\rStream callback hit #{count += 1} (#{bytes}B total) - last stream metadata '#{bits}'@#{streamMetadataIndex}"
       }
-      http.instance_variable_set(:@stream, streamer)
-      http = http.get(@options)
+      @http.instance_variable_set(:@stream, streamer)
+      @http = http.get(@options)
 
-      http.headers {
+      @http.headers {
         # http.response_header.each do |k, v|
         #   puts "#{k} - #{v}"
         # end
@@ -164,10 +164,14 @@ class RadioGrabber
         # puts "icy-metaint: #{http.response_header['icy-metaint']}"
       }
       
-      http.errback {
+      @http.errback {
         puts "error --- handler here"
       }
     end
+  end
+  
+  def kill
+    @http.unbind("killed!")
   end
   
   protected
