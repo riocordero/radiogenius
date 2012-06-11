@@ -12,7 +12,7 @@
 
 <% @plays.each do |play| %>
   <tr>
-	<td><%=link_to "play", "javascript:get_radio().sndPlay('#{play.station.url};')"%></td>
+	<td><%=link_to "play", "javascript:get_radio().sndPlay('#{play.station.streamable_url};')"%></td>
 	<td><%=link_to "stop", "javascript:get_radio().sndStop()"%></td>
 	<td><%= play.station.name%></td>
 	<td><%= play.song_title %></td>
@@ -26,7 +26,7 @@
 	<script>
 		function get_radio(){
 			return document.getElementById('player');
-		}		
+		}
 	</script>
 	<div>
 		<embed src="irp.swf" width="1" height="1" id="player" wmode="transparent" ></embed>
