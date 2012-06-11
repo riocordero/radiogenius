@@ -1,5 +1,5 @@
 <div>
-	<h1>radiogeni.us</h1>	
+	<div id="logo"></div>
 	<%if !@hide_search%>
 		<%=form_tag("/plays", :method=>"get") do %>
 			<%=text_field_tag(:q)%>
@@ -7,4 +7,5 @@
 		<%end%>
 	<%end%>
 	
+	<div>Find your song...now!</div>
 </div>
