@@ -1,7 +1,8 @@
-<div>
+<div style="padding-top: 10em">
   <%=form_tag("/plays", :method=>"get", :id => 'search-box', :class => 'form-inline offset2') do %>
-    <%= text_field_tag(:q, '', :class => 'span6 btn-large') %>
-    <%= submit_tag("Search", :class => 'span2 btn btn-primary btn-large') %>
+    <div class="input-append">
+      <%= text_field_tag(:q, '', :class => 'span6 btn-large') %><%= submit_tag("Search", :class => 'span2 btn btn-primary btn-large') %>
+    </div>
   <% end %>
   <script
      type="text/javascript"

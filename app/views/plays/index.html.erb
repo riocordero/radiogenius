@@ -1,7 +1,8 @@
 <div>
   <%=form_tag("/plays", :method=>"get", :id => 'search-box', :class => 'form-inline offset2') do %>
-    <%= text_field_tag(:q, params[:q], :class => 'span6 btn-large') %>
-    <%= submit_tag("Search", :class => 'span2 btn btn-primary btn-large') %>
+    <div class="input-append">
+      <%= text_field_tag(:q, params[:q], :class => 'span6 btn-large') %><%= submit_tag("Search", :class => 'span2 btn btn-primary btn-large') %>
+    </div>
   <% end %>
 </div>
 
@@ -33,8 +34,12 @@
 
   <% @plays.each do |play| %>
     <tr>
-      <td><%=link_to "play", "javascript:get_radio().sndPlay('#{play.station.streamable_url}')"%></td>
-      <td><%= play.station.name%></td>
+      <td><%= link_to(
+              "►",
+              play.station.streamable_url,
+              :class => 'play',
+              'data-station' => play.station.name) %></td>
+      <td><%= play.station.name %></td>
       <td><%= play.song_title %></td>
       <td><%= play.artist %></td>
       <td><%= time_ago_in_words(play.started_at)%> ago</td>
@@ -61,7 +66,11 @@
 
     <% @potential_plays.each do |play| %>
       <tr>
-        <td><%=link_to "play", "javascript:get_radio().sndPlay('#{play.station.streamable_url}')"%></td>
+        <td><%= link_to(
+                "►",
+                play.station.streamable_url,
+                :class => 'play',
+                'data-station' => play.station.name) %></td>
         <td><%= play.station.name%></td>
         <td><%= play.song_title %></td>
         <td><%= play.artist %></td>
@@ -76,17 +85,36 @@
   </table>
 </div>
 <div id="player-container" style="display: none">
-  <div id="player-icon"></div>
+  <a id="player-icon" href="#">■</a>
   <div id="player-text">This should be fixed.</div>
 </div>
 
 <div>
-	<script>
-		function get_radio(){
-			return document.getElementById('player');
-		}
-	</script>
-	<div>
-		<embed src="irp.swf" width="1" height="1" id="player" wmode="transparent" ></embed>
-	</div>
+  <script>
+    function get_radio() {
+      return document.getElementById('player');
+    }
+    var isPlaying = false;
+    $('body').on('click', '.play', function(e) {
+      e.preventDefault();
+      if (isPlaying) {
+        get_radio().sndStop();
+      }
+      var $this = $(this);
+      $('#player-container').show().find('#player-text').text($this.data('station'));
+      isPlaying = true;
+      get_radio().sndPlay($this.attr('href'));
+    });
+    $('#player-icon').on('click', function(e) {
+      e.preventDefault();
+      if (isPlaying) {
+        get_radio().sndStop();
+      }
+      $('#player-container').hide();
+      isPlaying = false;
+    });
+  </script>
+  <div>
+    <embed src="irp.swf" width="1" height="1" id="player" wmode="transparent"></embed>
+  </div>
 </div>
