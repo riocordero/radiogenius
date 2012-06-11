@@ -48,6 +48,11 @@ header div {
   font-size: 15px;
   line-height: normal;
 }
+a.play, a#player-icon {
+  display: block;
+  float: left;
+  padding: 0 .5em;
+}
 a.play:hover, a#player-icon:hover {
   text-decoration: none;
 }
