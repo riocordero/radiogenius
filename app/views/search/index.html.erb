@@ -1,7 +1,7 @@
 <div>
-	<%=form_tag("/plays", :method=>"get", :id => 'search-box') do %>
+	<%=form_tag("/plays", :method=>"get", :id => 'search-box', :class => 'form-inline') do %>
 		<%= text_field_tag(:q) %>
-		<%= submit_tag("Search") %>
+		<%= submit_tag("Search", :class => 'btn') %>
 	<%end%>
 	
 	<div class="tag_cloud">

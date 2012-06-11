@@ -100,6 +100,7 @@ end
 class RadioGrabber
   attr_reader :url
   attr_reader :station
+  attr_reader :logger
   # attr_reader :metadata_interval
 
   def initialize(options = {})
@@ -109,6 +110,7 @@ class RadioGrabber
       @station = options[:station]
       @url = station.url
     end
+    @logger = options[:logger] || Logger.new(STDOUT)
     @conn = {
       :connect_timeout => '5',
       :inactivity_timeout => '10',
@@ -155,6 +157,12 @@ class RadioGrabber
       @http = @http.get(@options)
 
       @http.headers {
+        @running = true
+        if station
+          logger.info "connection to station: #{station.id} - #{station.name}"
+        else
+          logger.info "connection to url: #{url}"
+        end
         # http.response_header.each do |k, v|
         #   puts "#{k} - #{v}"
         # end
@@ -165,13 +173,29 @@ class RadioGrabber
       }
       
       @http.errback {
-        puts "error --- handler here"
+        if station
+          logger.error "error grabbing station: #{station.id}"
+        else
+          logger.error "error grabbing url: #{url}"
+        end
+        @running = false
+        retry_on_error
       }
     end
   end
   
-  def kill
-    @http.unbind("killed!")
+  def stop
+    if station
+      logger.info "stopped grabber for station: #{station.id} - #{station.name}"
+    else
+      logger.info "stopped grabber for url: #{url}"
+    end
+    @http.unbind("stop")
+    @running = false
+  end
+  
+  def running?
+    @running
   end
   
   protected
@@ -186,14 +210,33 @@ class RadioGrabber
           blob = blob[1..blob.size-2]
         end
         metadata = blob.split(/\s-\s/)
-        artist = metadata[0].strip
-        song = metadata[1].strip
-        if station
-          station.plays << Play.new(:started_at => Time.now, :search_blob => blob, :artist => artist, :song_title => song)
+        artist = metadata[0] ? metadata[0].strip : nil
+        song = metadata[1] ? metadata[1].strip : nil
+        if station && artist && song
+          last = station.plays.last
+          if last.nil? || last.artist != artist || last.song_title != song 
+            # only create new entry when the song and artist have changed
+            Play.transaction do
+              station.plays << Play.new(:started_at => Time.now, :artist => artist, :song_title => song, :playing => true)
+              if last
+                last.playing = false
+                last.save
+              end
+            end
+          end
+        elsif station
+          logger.warn "no artist or song for station #{station.id} '#{blob}'"
         else
-          puts blob, artist, song
+          logger.debug blob
         end
       end
+    end
+  end
+  
+  def retry_on_error
+    EM::Timer.new(5) do
+      logger.info "retrying station: #{station.id}" if station
+      grab # we try to grab again after 5 seconds
     end
   end
   
