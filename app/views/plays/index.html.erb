@@ -1,6 +1,6 @@
 <div>
   <%=form_tag("/plays", :method=>"get", :id => 'search-box') do %>
-    <%= text_field_tag(:q) %>
+    <%= text_field_tag(:q, params[:q]) %>
     <%= submit_tag("Search") %>
   <% end %>
 </div>
@@ -19,7 +19,7 @@
 <div id="content">
   <h2>Search Results</h2>
 
-  <table>
+  <table width="100%">
     <tr>
       <th></th>
       <th></th>
@@ -37,6 +37,11 @@
       <td><%= play.song_title %></td>
       <td><%= play.artist %></td>
       <td><%= time_ago_in_words(play.started_at)%></td>
+    </tr>
+  <% end %>
+  <% if @plays.empty? %>
+    <tr>
+      <td colspan="6"><h1 style="margin: 5em auto; text-align: center">No results found</h1></td>
     </tr>
   <% end %>
   </table>
