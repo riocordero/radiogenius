@@ -52,6 +52,8 @@
   <% end %>
   </table>
 
+<% unless @potential_plays.blank? %>
+
   <h3>Recommended Stations</h3>
   <table class="table" width="100%">
     <thead>
@@ -83,7 +85,10 @@
       </tr>
     <% end %>
   </table>
+<% end %>
+
 </div>
+
 <div id="player-container" style="display: none">
   <a id="player-icon" href="#">■</a>
   <div id="player-text">This should be fixed.</div>
