@@ -8,7 +8,7 @@ class PlaysController < ApplicationController
       all_plays = Play.search(query)
     else
       query = "latest results"
-      all_plays = Play.where(:playing => true).order(:started_at => 'desc').limit(10)
+      all_plays = Play.where(:playing => true).order('id DESC').limit(10)
     end
     
     set_meta_tags(:title => query,

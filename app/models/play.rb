@@ -6,7 +6,7 @@ class Play < ActiveRecord::Base
   belongs_to :station
 
   def self.search(query)
-    self.find(:all, :conditions => ['match(search_blob) against (?)', query])
+    self.find(:all, :conditions => ['playing = ? AND match(search_blob) against (?)', true, query], :order => 'id DESC')
   end
 
   def build_search_blob
