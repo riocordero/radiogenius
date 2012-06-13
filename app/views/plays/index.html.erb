@@ -79,7 +79,7 @@
         <td><%= time_ago_in_words(play.started_at)%> ago</td>
       </tr>
     <% end %>
-    <% if @plays.empty? %>
+    <% if @potential_plays.empty? %>
       <tr>
         <td colspan="6"><h1 style="margin: 5em auto; text-align: center">No results found</h1></td>
       </tr>
