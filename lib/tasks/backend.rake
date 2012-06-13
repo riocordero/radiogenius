@@ -26,6 +26,8 @@ namespace :backend do
         if pid
           Process.kill(15, pid) # TERM to pid
         end
+      rescue Errno::ESRCH
+        puts "backend was stopped unexpectantly"
       ensure
         File.delete(pid_file)
       end

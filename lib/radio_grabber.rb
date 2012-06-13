@@ -140,13 +140,7 @@ class RadioGrabber
         begin
           listen_for_metadata(chunk)
         rescue Exception => e
-          if station
-            logger.error %Q{station #{station.id} failed: #{e.inspect} \n  #{e.backtrace.join("\n  ")}}
-          else
-            logger.error %Q{url #{url} failed: #{e.inspect} \n  #{e.backtrace.join("\n  ")}}
-          end
-        ensure
-          retry_on_error
+          logger.error %Q{#{e.inspect} \n  #{e.backtrace.join("\n  ")}}  
         end
         # byte_array = chunk.bytes.to_a
         # idx = chunk.index('StreamTitle')
@@ -169,9 +163,9 @@ class RadioGrabber
       @http.headers {
         @running = true
         if station
-          logger.info "connection to station: #{station.id} - #{station.name}"
+          logger.info "connected to station: #{station.id} - #{station.name}"
         else
-          logger.info "connection to url: #{url}"
+          logger.info "connected to url: #{url}"
         end
         # http.response_header.each do |k, v|
         #   puts "#{k} - #{v}"
@@ -184,9 +178,9 @@ class RadioGrabber
       
       @http.errback {
         if station
-          logger.error "error grabbing station: #{station.id}"
+          logger.error %Q{station #{station.id} failed... will retry in 5 seconds}
         else
-          logger.error "error grabbing url: #{url}"
+          logger.error %Q{url #{url} failed... will retry in 5 seconds}
         end
         @running = false
         retry_on_error
