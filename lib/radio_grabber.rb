@@ -139,10 +139,14 @@ class RadioGrabber
       streamer = Proc.new { |chunk|
         begin
           listen_for_metadata(chunk)
-        # rescue e
-        #   logger.error "error steam failed: #{e.inspect}"
-        # ensure
-        #   retry_on_error
+        rescue Exception => e
+          if station
+            logger.error %Q{station #{station.id} failed: #{e.inspect} \n  #{e.backtrace.join("\n  ")}}
+          else
+            logger.error %Q{url #{url} failed: #{e.inspect} \n  #{e.backtrace.join("\n  ")}}
+          end
+        ensure
+          retry_on_error
         end
         # byte_array = chunk.bytes.to_a
         # idx = chunk.index('StreamTitle')

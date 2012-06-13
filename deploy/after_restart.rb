@@ -1,2 +1,2 @@
 # start backend
-run "bundle exec rake -f #{release_path}/Rakefile backend:start"
+run "rake -f #{current_path}/Rakefile backend:start"
