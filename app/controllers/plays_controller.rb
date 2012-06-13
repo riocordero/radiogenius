@@ -3,7 +3,7 @@ class PlaysController < ApplicationController
   # GET /plays
   # GET /plays.json
   def index       
-    if params[:q]
+    unless params[:q].blank?
       query = params[:q]
       all_plays = Play.search(query)
     else
