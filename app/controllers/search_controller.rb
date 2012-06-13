@@ -3,12 +3,12 @@ class SearchController < ApplicationController
   def index
     set_meta_tags(:title => "the world's smartest radio search engine",
                   :description => "Find your song...now! We search the world's best internet radio stations for artists and songs that are currently playing.", 
-                  :keywords => ['radio', 'music', 'music search engine', 'radio search engine', 'internet radio', 'free music', 'streaming music', 'shoutcast', 'mp3', 'top 40', 'winamp'])
+                  :keywords => SEO_KEYWORDS)
     
     @hide_search = true
 
     #try to make the tag cloud
-    current_plays = Play.find(:all, :conditions=>"playing=true")
+    current_plays = Play.where(:playing => true)
     artist_counts = current_plays.inject(Hash.new(0)) { |count_ary, play| count_ary[play.artist] += 1 ; count_ary }
 
     tags = artist_counts.collect{|k,v| k}

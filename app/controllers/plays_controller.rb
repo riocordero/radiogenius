@@ -2,12 +2,18 @@
 class PlaysController < ApplicationController
   # GET /plays
   # GET /plays.json
-  def index
+  def index       
     if params[:q]
-      all_plays = Play.search(params[:q])
+      query = params[:q]
+      all_plays = Play.search(query)
     else
-      all_plays = Play.all
+      query = "latest results"
+      all_plays = Play.where(:playing => true).order(:started_at => 'desc').limit(10)
     end
+    
+    set_meta_tags(:title => query,
+                  :description => "Find your song...now! We search the world's best internet radio stations for artists and songs that are currently playing.", 
+                  :keywords => [query] + (SEO_KEYWORDS))
      
     #plays
     @plays = all_plays.select{|p| p.playing == true}
