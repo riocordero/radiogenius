@@ -7,6 +7,7 @@ gem 'rails', '3.2.5'
 
 gem 'mysql2'
 gem 'em-http-request'
+gem 'meta-tags', :require => 'meta_tags'
 
 # Gems used only for assets and not required
 # in production environments by default.

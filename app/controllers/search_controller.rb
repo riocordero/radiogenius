@@ -1,6 +1,10 @@
-
 class SearchController < ApplicationController
+  
   def index
+    set_meta_tags(:title => "the world's smartest radio search engine",
+                  :description => "Find your song...now! We search the world's best internet radio stations for artists and songs that are currently playing.", 
+                  :keywords => ['radio', 'music', 'music search engine', 'radio search engine', 'internet radio', 'free music', 'streaming music', 'shoutcast', 'mp3', 'top 40', 'winamp'])
+    
     @hide_search = true
 
     #try to make the tag cloud
